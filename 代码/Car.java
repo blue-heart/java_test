@@ -59,6 +59,8 @@ public class Car{
 			System.out.println("手动挡，手疼");
 		}
 	}
+
+	//修改后的
 	
 	
 	
