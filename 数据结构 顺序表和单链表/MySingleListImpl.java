@@ -8,39 +8,45 @@ public class MySingleListImpl implements
     //成员内部类 实例内部类
     //直接访问外部
     private static int a = 10;
-    class Node{
+
+    class Node {
         private int data;
         private Node next;
-        private  static final int a =20;
+        private static final int a = 20;
+
         //实例内部类 可以定义静态的 必须在编译期间确定
         //就是加final
         //如果内部有相同字母 会运行内部的
         //Node类要产生对象要用构造函数
-        public Node(int data){
+        public Node(int data) {
             this.data = data;
-            this.next =null;
+            this.next = null;
 
         }
-        public void fun(){
+
+        public void fun() {
             System.out.println(a);
             //拥有外部类的this引用 有额外的开销
             System.out.println(MySingleListImpl.this.a);
         }
     }
+
     //定义头小块
     private Node head;
-    public MySingleListImpl(){
+
+    public MySingleListImpl() {
         this.head = null;
     }
+
     @Override
     public void addFirst(int data) {
         //这个对象就是一个链表的 小块
         //也象征着一个地址
         //模拟图像里的内容
         Node node = new Node(data);
-        if (this.head ==null){
-         this.head = node;
-        }else{
+        if (this.head == null) {
+            this.head = node;
+        } else {
             //这一步就是 先赋值 在把值给头
             //因为还要用头 就是语言的执行顺序
             //的技巧
@@ -57,58 +63,59 @@ public class MySingleListImpl implements
         Node node = new Node(data);
         Node cur = this.head;
         //第一次插入
-        if (cur == null){
+        if (cur == null) {
             this.head = node;
-        }else{
+        } else {
             //判断条件 cur.next是否为空
-            while (cur.next !=null){
+            while (cur.next != null) {
                 cur = cur.next;
             }
-            cur.next=node;
+            cur.next = node;
 
         }
 
     }
+
     //以下两个是找节点并且 合法性判断
     //找到index-1的节点
-    private Node searchIndex(int index){
+    private Node searchIndex(int index) {
         //判断是不是乱插
         checkIndex(index);
         //头结点没有前驱
-        if (index == 0){
-            return  null;
+        if (index == 0) {
+            return null;
         }
         //下面都是自己定义 凑够逻辑即可
         int count = 0;//记录走的步数
         Node cur = this.head;
         //并且&&
-        while(cur.next !=null && count<index-1){
+        while (cur.next != null && count < index - 1) {
             cur = cur.next;
             count++;
         }
         //此时cur就是index-1的位置
         return cur;
     }
-    private void checkIndex(int index){
+
+    private void checkIndex(int index) {
         //getlength 可以插 大于不可以
-        if (index<0 || index>getLength()){
+        if (index < 0 || index > getLength()) {
             throw new IndexOutOfBoundsException
                     ("下标不合法");
-    }
+        }
     }
 
     @Override
-    public boolean addindex(int index, int data)
-    {
+    public boolean addindex(int index, int data) {
         //添加到index这个位置
         //data 参数作用出来了
         Node node = new Node(data);
         Node cur = searchIndex(index);
-        if (cur == null){
+        if (cur == null) {
             node.next = this.head;
             this.head = node;
 
-        }else {
+        } else {
             //先绑定后面再绑定前面
             //如果不这样 先绑前面
             // cur.next = node；
@@ -125,9 +132,9 @@ public class MySingleListImpl implements
     @Override
     public boolean contains(int key) {
         Node cur = this.head;
-        while (cur!=null){
+        while (cur != null) {
             //共有属性都可以用
-            if (cur.data == key){
+            if (cur.data == key) {
                 return true;
             }
             cur = cur.next;
@@ -135,20 +142,21 @@ public class MySingleListImpl implements
 
         return false;
     }
-    private Node searchPre(int key){
+
+    private Node searchPre(int key) {
         /*
         因为要找前驱 所以 第一个是特殊情况
         为什么 找前驱 因为前驱 存储后面的数据
         1.是不是第一个节点
         2.if（cur.next.data==key）
          */
-        Node cur= this.head;
-        if (cur.data==key){
+        Node cur = this.head;
+        if (cur.data == key) {
             return this.head;
             //return null;
         }
-        while (cur.next!=null){
-            if (cur.next.data==key){
+        while (cur.next != null) {
+            if (cur.next.data == key) {
                 return cur;
 
             }
@@ -162,15 +170,15 @@ public class MySingleListImpl implements
     public int remove(int key) {
         //也可以这样写
         //if(head.data == key)
-        int oldData=  0;
+        int oldData = 0;
 
         Node pre = searchPre(key);
-        if(pre == null){
+        if (pre == null) {
             //单链表可以放-1
             throw new UnsupportedOperationException
                     ("没有key的前驱");
         }
-        if (pre==this.head&& pre.data ==key){
+        if (pre == this.head && pre.data == key) {
             oldData = this.head.data;
             this.head = this.head.next;
             return oldData;
@@ -188,20 +196,20 @@ public class MySingleListImpl implements
         Node pre = this.head;
         Node cur = this.head.next;
 
-        while (cur!= null){
+        while (cur != null) {
             //这个就是两个 条件赋值
             //和之前的while一样
             if (cur.data == key) {
                 //删除了
                 pre.next = cur.next;
                 cur = cur.next;
-            }else {
-                pre=cur;
-                cur=cur.next;
+            } else {
+                pre = cur;
+                cur = cur.next;
             }
         }
-        if (this.head.data ==key){
-            this.head=this.head.next;
+        if (this.head.data == key) {
+            this.head = this.head.next;
 
         }
 
@@ -212,7 +220,7 @@ public class MySingleListImpl implements
         //节点的个数
         int count = 0;
         Node cur = this.head;
-        while (cur!= null){
+        while (cur != null) {
             count++;
             cur = cur.next;
         }
@@ -225,8 +233,8 @@ public class MySingleListImpl implements
         //用cur 就不会 只是复制了个这样的属性
         //进行判断使用
         Node cur = this.head;
-        while(cur!=null){
-            System.out.print(cur.data+" ");
+        while (cur != null) {
+            System.out.print(cur.data + " ");
             //也就是 手动 向后走的条件
             //这个next指的是 下一个 小块
             cur = cur.next;
@@ -237,7 +245,7 @@ public class MySingleListImpl implements
 
     @Override
     public void clear() {
-        while (this.head!=null){
+        while (this.head != null) {
             Node cur = this.head.next;
             //前驱没有引用 又是前面的 就清除了
             this.head.next = null;
@@ -247,3 +255,4 @@ public class MySingleListImpl implements
 
     }
 }
+
